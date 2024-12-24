@@ -26,8 +26,8 @@ public class WalletApiServerController implements WalletApi {
 
     private static final IAppLogger LOGGER = AppLogger.getLogger(WalletApiServerController.class);
 
-    private static final double DEFAULT_CREDIT   = 10; //100_000D
-    private static final String DEFAULT_CURRENCY = "BTC"; //EUR
+    private static final double DEFAULT_CREDIT   = 00; //100_000D
+    private static final String DEFAULT_CURRENCY = "EUR"; //BTC
 
     private static final boolean SOLVE_CREDIT = true;
 
