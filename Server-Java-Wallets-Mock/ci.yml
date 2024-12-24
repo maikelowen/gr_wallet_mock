@@ -1,0 +1,18 @@
+version: 2
+packageType: maven
+tools:
+  jdk: 'jdk-8'
+  maven: 'maven-3'
+  docker: 'docker-20'
+stages:
+  prepare: []
+  test:
+    - mvn clean test -q -P test-ci
+  package: []
+  publish:
+    - mvn clean deploy -q -P deploy-ci
+  dockerBuild:
+    - mvn clean spring-boot:build-image -q -P build-docker-ci
+  dockerPublish:
+    - mvn deploy -q -P deploy-docker-ci
+  doc: []

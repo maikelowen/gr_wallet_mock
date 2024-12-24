@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.goldenrace.wallet</groupId>
+    <artifactId>goldenrace-wallet-mock-server</artifactId>
+    <version>1.0.5</version>
+
+    <name>GoldenRace Wallet Mock Server</name>
+    <description>Mock implementation of the GoldenRace wallet server to use the Wallet API</description>
+
+    <properties>
+        <!-- Configuration -->
+        <character.encoding>UTF-8</character.encoding>
+        <project.build.sourceEncoding>${character.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${character.encoding}</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- Config: surefire -->
+        <maven.surefire.config.default>-Duser.timezone=GMT</maven.surefire.config.default>
+        <maven.surefire.config>${maven.surefire.config.default}</maven.surefire.config>
+        <!-- Config: jacoco/sonar -->
+        <jacoco.line.coverage.all>0.0</jacoco.line.coverage.all>
+        <!-- Config: docker -->
+        <docker.registry>nexus.nebula-ent.com:8084</docker.registry>
+        <docker.image.path>${project.basedir}</docker.image.path>
+        <docker.image.name>${project.artifactId}</docker.image.name>
+        <docker.image.tag>${project.version}</docker.image.tag>
+        <docker.image>${docker.registry}/${docker.image.name}:${docker.image.tag}</docker.image>
+        <!-- Plugins -->
+        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+        <maven.deploy.version>3.0.0-M1</maven.deploy.version>
+        <exec.maven.version>3.0.0</exec.maven.version>
+        <jacoco.maven.version>0.8.7</jacoco.maven.version>
+        <sonar.maven.version>3.9.0.2155</sonar.maven.version>
+        <!-- Libraries -->
+        <joda.time.version>2.10.10</joda.time.version>
+        <jackson.version>2.12.3</jackson.version>
+        <commoms.io.version>2.6</commoms.io.version>
+        <!-- Testing -->
+        <testng.version>7.4.0</testng.version>
+        <mockito.version>3.11.0</mockito.version>
+        <assertj.version>3.19.0</assertj.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Time library -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.time.version}</version>
+        </dependency>
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+        </dependency>
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commoms.io.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/config</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.version}</version>
+                    <configuration>
+                        <argLine>${maven.surefire.config}</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar.maven.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.maven.version}</version>
+                    <configuration>
+                        <propertyName>jacoco.argLine</propertyName>
+                    </configuration>
+                    <executions>
+                        <!-- Prepares the property pointing to the JaCoCo runtime agent which is passed as VM argument when Maven the Surefire plugin is executed. -->
+                        <execution>
+                            <id>pre-unit-test</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run. -->
+                        <execution>
+                            <id>post-unit-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <element>PACKAGE</element>
+                                        <limits>
+                                            <limit>
+                                                <counter>LINE</counter>
+                                                <value>COVEREDRATIO</value>
+                                                <minimum>${jacoco.line.coverage.all}</minimum>
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven.deploy.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec.maven.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>test-ci</id>
+            <properties>
+                <maven.surefire.config>@{jacoco.argLine} ${maven.surefire.config.default}</maven.surefire.config>
+            </properties>
+        </profile>
+        <profile>
+            <id>deploy-ci</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-dev-releases</id>
+                    <url>https://nexus.nebula-ent.com:8082/repository/maven-dev-releases</url>
+                </repository>
+                <snapshotRepository>
+                    <id>nexus-snapshots</id>
+                    <url>https://nexus.nebula-ent.com:8082/repository/maven-snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>build-docker-ci</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <modules/>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Remove existing image from workspace -->
+                            <execution>
+                                <id>docker-clean</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>image</argument>
+                                        <argument>rm</argument>
+                                        <argument>-f</argument>
+                                        <argument>${docker.image}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <image>
+                                <name>${docker.image}</name>
+                            </image>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>deploy-docker-ci</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <maven.install.skip>true</maven.install.skip>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+            <modules/>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Push the image to a docker repo. -->
+                            <execution>
+                                <id>docker-push</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>push</argument>
+                                        <argument>-q</argument>
+                                        <argument>${docker.image}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>https://nexus.nebula-ent.com:8082/repository/maven-releases</url>
+        </repository>
+        <repository>
+            <id>nexus-dev-releases</id>
+            <url>https://nexus.nebula-ent.com:8082/repository/maven-dev-releases</url>
+        </repository>
+    </repositories>
+
+</project>

@@ -1,0 +1,7 @@
+{
+  "basePath": "doc",
+  "sidebar": [
+    "doc/changelog",
+    "doc/sections/index"
+  ]
+}

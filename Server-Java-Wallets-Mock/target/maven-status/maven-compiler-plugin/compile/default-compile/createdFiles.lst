@@ -1,0 +1,12 @@
+com\goldenrace\wallet\server\WalletApiServerApplication.class
+com\goldenrace\wallet\server\properties\logging\AppLog$Builder.class
+com\goldenrace\wallet\server\WalletApiServerController.class
+com\goldenrace\wallet\server\properties\Settings.class
+com\goldenrace\wallet\server\api\WalletApi.class
+com\goldenrace\wallet\server\WalletApiServerConfiguration.class
+com\goldenrace\wallet\server\properties\logging\AppLog.class
+com\goldenrace\wallet\server\properties\logging\IAppLogger.class
+com\goldenrace\wallet\server\api\model\utils\JsonUtils.class
+com\goldenrace\wallet\server\api\model\ModelJson.class
+com\goldenrace\wallet\server\properties\logging\AppLogger.class
+com\goldenrace\wallet\server\env\AppEnvironmentPostProcessor.class
