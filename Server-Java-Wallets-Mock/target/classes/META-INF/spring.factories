@@ -1,7 +1,0 @@
-# Application Context Initializers
-org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.goldenrace.wallet.server.env.AppEnvironmentPostProcessor
-
-# Application Listeners
-org.springframework.context.ApplicationListener=\
-  com.goldenrace.wallet.server.env.AppEnvironmentPostProcessor
