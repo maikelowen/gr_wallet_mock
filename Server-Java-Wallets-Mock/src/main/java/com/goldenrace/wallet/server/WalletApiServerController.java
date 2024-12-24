@@ -26,7 +26,7 @@ public class WalletApiServerController implements WalletApi {
 
     private static final IAppLogger LOGGER = AppLogger.getLogger(WalletApiServerController.class);
 
-    private static final double DEFAULT_CREDIT   = 00; //100_000D
+    private static final double DEFAULT_CREDIT   = 0.0; //100_000D
     private static final String DEFAULT_CURRENCY = "EUR"; //BTC
 
     private static final boolean SOLVE_CREDIT = true;
@@ -138,8 +138,8 @@ public class WalletApiServerController implements WalletApi {
             try {
                 ModelJson reqJson      = new ModelJson(cancel);
                 Integer   entityId     = reqJson.getInteger(ENTITY_ID);
-                Double    actualCredit = getCredit(entityId);
-                Double    newCredit    = actualCredit + reqJson.getDouble(AMOUNT);
+                Double    actualCredit = 0.0;
+                Double    newCredit    = 0.0;
                 updateCredit(entityId, newCredit);
 
                 ModelJson resJson  = new ModelJson();
@@ -164,7 +164,7 @@ public class WalletApiServerController implements WalletApi {
         for (JsonNode creditRequest : bulkRequestCredit) {
             try {
                 ModelJson reqJson      = new ModelJson(creditRequest);
-                Double    actualCredit = getCredit(reqJson.getInteger(ENTITY_ID));
+                Double    actualCredit = 0.0;
                 ModelJson resJson      = new ModelJson();
                 resJson.putString(TYPE, CREDIT_RESPONSE);
                 resJson.putDouble(CREDIT, actualCredit);
@@ -185,13 +185,13 @@ public class WalletApiServerController implements WalletApi {
             try {
                 ModelJson reqJson     = new ModelJson(payoutRequest);
                 JsonNode  wonDataNode = reqJson.getJsonNode(TICKET, WON_DATA);
-                Double    pending     = getPending(reqJson, wonDataNode);
+                Double    pending     = 0.0;
                 Long      ticketId    = reqJson.getLong(TICKET_ID);
                 ModelJson resJson;
                 if (Objects.nonNull(pending) && pending > 0) {
                     Integer entityId     = reqJson.getInteger(ENTITY_ID);
-                    Double  actualCredit = getCredit(entityId);
-                    Double  newCredit    = actualCredit + reqJson.getDouble(AMOUNT);
+                    Double  actualCredit = 0.0;
+                    Double  newCredit    = 0.0;
                     updateCredit(entityId, newCredit);
                     resJson = generateWalletCreditResponse(actualCredit, newCredit, ticketId, pending);
                 } else {
