@@ -1,6 +1,10 @@
 package com.goldenrace.wallet.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.goldenrace.wallet.server.api.WalletApi;
 import com.goldenrace.wallet.server.api.model.ModelJson;
 import com.goldenrace.wallet.server.properties.logging.AppLog;
@@ -115,14 +119,15 @@ public class WalletApiServerController implements WalletApi {
         } catch (IOException ex) {
             LOGGER.error(AppLog.Builder.id("sessionLogin").message(ex.getMessage()), ex);
         }
-        ModelJson resJson = new ModelJson();
-        resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
-        //resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
-        //resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
-        resJson.putString(CREDIT, "[]");
-        //Testing extWalletId
-        //resJson.putString("extWalletId", "ext_2");
-        return ResponseEntity.ok(resJson.getJsonNode());
+    
+        // Crear manualmente el JSON con ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode resJson = objectMapper.createObjectNode();
+        
+        resJson.put(TYPE, WALLET_LOGIN_RESPONSE);
+        resJson.set(CREDIT, objectMapper.createArrayNode()); // Agregar array vacío correctamente
+    
+        return ResponseEntity.ok(resJson);
     }
 
     @Override
