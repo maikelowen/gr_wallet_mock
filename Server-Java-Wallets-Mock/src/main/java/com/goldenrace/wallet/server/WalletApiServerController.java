@@ -119,7 +119,7 @@ public class WalletApiServerController implements WalletApi {
         resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
         //resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
         //resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
-        resJson.putDouble(CREDIT, null);
+        resJson.putString(CREDIT, "[]");
         //Testing extWalletId
         //resJson.putString("extWalletId", "ext_2");
         return ResponseEntity.ok(resJson.getJsonNode());
@@ -356,11 +356,11 @@ public class WalletApiServerController implements WalletApi {
         resJson.putString(RESULT, RESULT_SUCCESS);
         resJson.putString(EXT_TRANSACTION_ID, "PAY_" + ticketId);
         resJson.putString(ERROR_MESSAGE, "SUCCESS");
-        if (Objects.isNull(creditAmount)) {
-            resJson.putDouble(CREDIT_AMOUNT, newCredit - actualCredit);
-        } else {
-            resJson.putDouble(CREDIT_AMOUNT, creditAmount);
-        }
+        //if (Objects.isNull(creditAmount)) {
+            //resJson.putDouble(CREDIT_AMOUNT, newCredit - actualCredit);
+        //} else {
+            //resJson.putDouble(CREDIT_AMOUNT, creditAmount);
+        //}
         return resJson;
     }
 
