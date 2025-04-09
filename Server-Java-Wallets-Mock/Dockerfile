@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copiar el archivo JAR al contenedor
-COPY target/goldenrace-wallet-mock-server-1.0.5.jar
+COPY target/goldenrace-wallet-mock-server-1.0.5.jar app.jar
 
 # Exponer el puerto predeterminado de la aplicación (internamente)
 EXPOSE 8080
