@@ -117,9 +117,9 @@ public class WalletApiServerController implements WalletApi {
         }
         ModelJson resJson = new ModelJson();
         resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
-        //resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
-        //resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
-        resJson.putString(CREDIT, null);
+        resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
+        resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
+        resJson.putDouble(CREDIT, userCredit);
         //Testing extWalletId
         //resJson.putString("extWalletId", "ext_2");
         return ResponseEntity.ok(resJson.getJsonNode());
@@ -167,7 +167,7 @@ public class WalletApiServerController implements WalletApi {
                 Double    actualCredit = 0.0;
                 ModelJson resJson      = new ModelJson();
                 resJson.putString(TYPE, CREDIT_RESPONSE);
-                resJson.putDouble(CREDIT, null);
+                resJson.putDouble(CREDIT, actualCredit);
                 resJson.putString(CURRENCY_CODE, reqJson.getString(CURRENCY_CODE));
                 resJson.putString(EXT_ID, reqJson.getString(EXT_ID));
                 responses.add(resJson.getJsonNode());
@@ -190,9 +190,9 @@ public class WalletApiServerController implements WalletApi {
                 ModelJson resJson;
                 if (Objects.nonNull(pending) && pending > 0) {
                     Integer entityId     = reqJson.getInteger(ENTITY_ID);
-                    Double  actualCredit = null;
-                    Double  newCredit    = null;
-                    updateCredit(entityId, null);
+                    Double  actualCredit = 0.0;
+                    Double  newCredit    = 0.0;
+                    updateCredit(entityId, newCredit);
                     resJson = generateWalletCreditResponse(actualCredit, newCredit, ticketId, pending);
                 } else {
                     resJson = generateWalletCreditResponse(null, null, ticketId, pending);
@@ -266,13 +266,13 @@ public class WalletApiServerController implements WalletApi {
                 Long      ticketId = reqJson.getLong(TICKET_ID);
                 resJson.putString(TYPE, SELL_RESPONSE);
                 resJson.putLong(TICKET_ID, ticketId);
-                //resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
+                resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
                 resJson.putString(RESULT, RESULT_SUCCESS);
-                //resJson.putDouble(NEW_CREDIT, null);
-                //resJson.putDouble(OLD_CREDIT, null);
-                //resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
-                //resJson.putString(EXT_DATA, "Test");
-                resJson.putString(ERROR_MESSAGE, "SUCCESS");
+                resJson.putDouble(NEW_CREDIT, null);
+                resJson.putDouble(OLD_CREDIT, null);
+                resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
+                resJson.putString(EXT_DATA, "Test");
+                //resJson.putString(ERROR_MESSAGE, "SUCCESS");
 
                 if (sellWrongResponse) {
                     resJson.putString(RESULT, "error");
@@ -350,8 +350,8 @@ public class WalletApiServerController implements WalletApi {
     private ModelJson generateWalletCreditResponse(Double actualCredit, Double newCredit, Long ticketId, Double creditAmount) {
         ModelJson resJson = new ModelJson();
         resJson.putString(TYPE, WALLET_CREDIT_RESPONSE);
-        //resJson.putDouble(OLD_CREDIT, actualCredit);
-        //resJson.putDouble(NEW_CREDIT, newCredit);
+        resJson.putDouble(OLD_CREDIT, actualCredit);
+        resJson.putDouble(NEW_CREDIT, newCredit);
         resJson.putLong(TICKET_ID, ticketId);
         resJson.putString(RESULT, RESULT_SUCCESS);
         resJson.putString(EXT_TRANSACTION_ID, "PAY_" + ticketId);
