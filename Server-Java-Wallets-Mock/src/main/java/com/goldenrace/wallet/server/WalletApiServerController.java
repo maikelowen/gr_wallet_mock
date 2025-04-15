@@ -46,6 +46,7 @@ public class WalletApiServerController implements WalletApi {
     protected static final String EXT_TOKEN          = "extToken";
     protected static final String EXT_TRANSACTION_ID = "extTransactionID";
     protected static final String EXT_DATA           = "extData";
+    protected static final String EXT_WALLET_ID      = "extWalletId";
     protected static final String LAST_SEEN          = "lastSeen";
     protected static final String NEW_CREDIT         = "newCredit";
     protected static final String OLD_CREDIT         = "oldCredit";
@@ -268,8 +269,9 @@ public class WalletApiServerController implements WalletApi {
                 resJson.putLong(TICKET_ID, ticketId);
                 resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
                 resJson.putString(RESULT, RESULT_SUCCESS);
-                resJson.putDouble(NEW_CREDIT, 0.0);
-                resJson.putDouble(OLD_CREDIT, 0.0);
+                resJson.putInteger(EXT_WALLET_ID, 1234566);
+                // resJson.putDouble(NEW_CREDIT, 0.0);
+                // resJson.putDouble(OLD_CREDIT, 0.0);
                 resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
                 resJson.putString(EXT_DATA, "Test");
                 //resJson.putString(ERROR_MESSAGE, "SUCCESS");
