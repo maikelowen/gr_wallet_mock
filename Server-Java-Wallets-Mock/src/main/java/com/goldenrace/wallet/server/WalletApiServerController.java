@@ -26,7 +26,7 @@ public class WalletApiServerController implements WalletApi {
 
     private static final IAppLogger LOGGER = AppLogger.getLogger(WalletApiServerController.class);
 
-    private static final double DEFAULT_CREDIT   = 0.0; //100_000D
+    private static final double DEFAULT_CREDIT   = 10; //100_000D
     private static final String DEFAULT_CURRENCY = "EUR"; //BTC
 
     private static final boolean SOLVE_CREDIT = true;
@@ -110,12 +110,12 @@ public class WalletApiServerController implements WalletApi {
     @Override
     public ResponseEntity<JsonNode> sessionLogin(@RequestBody JsonNode loginRequest) {
         Double userCredit = 10D;
-        try {
-            ModelJson reqJson = new ModelJson(loginRequest);
-            userCredit = getCredit(reqJson.getInteger(UNIT_ID));
-        } catch (IOException ex) {
-            LOGGER.error(AppLog.Builder.id("sessionLogin").message(ex.getMessage()), ex);
-        }
+        // try {
+        //     ModelJson reqJson = new ModelJson(loginRequest);
+        //     userCredit = getCredit(reqJson.getInteger(UNIT_ID));
+        // } catch (IOException ex) {
+        //     LOGGER.error(AppLog.Builder.id("sessionLogin").message(ex.getMessage()), ex);
+        // }
         ModelJson resJson = new ModelJson();
         resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
         resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
