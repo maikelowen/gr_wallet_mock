@@ -186,13 +186,13 @@ public class WalletApiServerController implements WalletApi {
             try {
                 ModelJson reqJson     = new ModelJson(payoutRequest);
                 JsonNode  wonDataNode = reqJson.getJsonNode(TICKET, WON_DATA);
-                Double    pending     = 0.0;
+                Double    pending     = getPending(reqJson, wonDataNode);
                 Long      ticketId    = reqJson.getLong(TICKET_ID);
                 ModelJson resJson;
                 if (Objects.nonNull(pending) && pending > 0) {
                     Integer entityId     = reqJson.getInteger(ENTITY_ID);
-                    Double  actualCredit = 0.0;
-                    Double  newCredit    = 0.0;
+                    Double  actualCredit = getCredit(entityId);
+                    Double  newCredit    = actualCredit + reqJson.getDouble(AMOUNT);
                     updateCredit(entityId, newCredit);
                     resJson = generateWalletCreditResponse(actualCredit, newCredit, ticketId, pending);
                 } else {
@@ -269,7 +269,7 @@ public class WalletApiServerController implements WalletApi {
                 resJson.putLong(TICKET_ID, ticketId);
                 resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
                 resJson.putString(RESULT, RESULT_SUCCESS);
-                resJson.putInteger(EXT_WALLET_ID, 1234566);
+                resJson.putString(EXT_WALLET_ID, "1234566");
                 resJson.putDouble(NEW_CREDIT, newCredit);
                 resJson.putDouble(OLD_CREDIT, actualCredit);
                 resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
@@ -353,6 +353,7 @@ public class WalletApiServerController implements WalletApi {
         ModelJson resJson = new ModelJson();
         resJson.putString(TYPE, WALLET_CREDIT_RESPONSE);
         resJson.putDouble(OLD_CREDIT, actualCredit);
+        resJson.putString(EXT_WALLET_ID, "1234566");
         resJson.putDouble(NEW_CREDIT, newCredit);
         resJson.putLong(TICKET_ID, ticketId);
         resJson.putString(RESULT, RESULT_SUCCESS);
