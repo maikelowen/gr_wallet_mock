@@ -353,7 +353,7 @@ public class WalletApiServerController implements WalletApi {
         ModelJson resJson = new ModelJson();
         resJson.putString(TYPE, WALLET_CREDIT_RESPONSE);
         resJson.putDouble(OLD_CREDIT, actualCredit);
-        resJson.putString(EXT_WALLET_ID, "1234566");
+        //resJson.putString(EXT_WALLET_ID, "1234566");
         resJson.putDouble(NEW_CREDIT, newCredit);
         resJson.putLong(TICKET_ID, ticketId);
         resJson.putString(RESULT, RESULT_SUCCESS);
