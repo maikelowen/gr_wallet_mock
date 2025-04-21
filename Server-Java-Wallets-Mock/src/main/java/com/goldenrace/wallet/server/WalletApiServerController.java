@@ -258,102 +258,104 @@ public class WalletApiServerController implements WalletApi {
         return ResponseEntity.ok(responses);
     }
 
-
-    public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
-        List<JsonNode> responses = new ArrayList<>();
-
-        for (JsonNode sellRequest : bulkRequestSell) {
-            try {
-                long ticketId = sellRequest.get("ticketId").asLong();  // Asegúrate de que `ticketId` esté en el request
-
-                // Transacción 1: promoción
-                ObjectNode txPromo = objectMapper.createObjectNode();
-                txPromo.put("extTransactionID", "SELL_" + ticketId);
-                txPromo.put("creditAmount", 1.0);
-                txPromo.put("extWalletId", "1234566");
-                txPromo.put("isPromotion", false);
-
-                // Transacción 2: real
-                ObjectNode txReal = objectMapper.createObjectNode();
-                txReal.put("extTransactionID", "163706");
-                txReal.put("creditAmount", 0.0);
-                txReal.put("oldCredit", 10.39);
-                txReal.put("newCredit", 10.39);
-                //txReal.put("extWalletId", "REAL_zafi20250414-3");
-                txReal.put("isPromotion", false);
-
-                // Array de transacciones
-                ArrayNode transactionsArray = objectMapper.createArrayNode();
-                transactionsArray.add(txPromo);
-                transactionsArray.add(txReal);
-
-                // Respuesta principal
-                ObjectNode multiWalletResponse = objectMapper.createObjectNode();
-                multiWalletResponse.put("type", "MultiWalletSellResponse");
-                multiWalletResponse.put("ticketId", ticketId);
-                multiWalletResponse.put("result", "success");
-                multiWalletResponse.put("errorId", 0);
-                multiWalletResponse.put("errorMessage", "SUCCESS");
-                multiWalletResponse.put("extTransactionID", "163706");
-                multiWalletResponse.put("extTicketId", "Test_" + ticketId);
-                multiWalletResponse.set("transactions", transactionsArray);
-                multiWalletResponse.put("extTransactionData", "[]");
-
-                responses.add(multiWalletResponse);
-
-            } catch (Exception e) {
-                // En caso de error, puedes devolver un JSON de error también
-                ObjectNode errorResponse = objectMapper.createObjectNode();
-                errorResponse.put("type", "MultiWalletSellResponse");
-                errorResponse.put("result", "error");
-                errorResponse.put("errorId", 100);
-                errorResponse.put("errorMessage", "Unexpected error: " + e.getMessage());
-                responses.add(errorResponse);
-            }
-        }
-
-        return ResponseEntity.ok(responses);
-    }
-    // @Override
+    // MultiWalletSell test
+    
     // public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
     //     List<JsonNode> responses = new ArrayList<>();
+
     //     for (JsonNode sellRequest : bulkRequestSell) {
     //         try {
-    //             ModelJson reqJson      = new ModelJson(sellRequest);
-    //             Integer   entityId     = reqJson.getInteger(ENTITY_ID);
-    //             Double    actualCredit = getCredit(entityId);
-    //             ModelJson ticketJson   = new ModelJson(reqJson.getJsonNode(TICKET));
-    //             Double    newCredit    = actualCredit - ticketJson.getDouble(STAKE, 0D) - ticketJson.getDouble(STAKE_TAXES, 0D);
-    //             updateCredit(entityId, newCredit);
+    //             long ticketId = sellRequest.get("ticketId").asLong();  // Asegúrate de que `ticketId` esté en el request
 
-    //             ModelJson resJson  = new ModelJson();
-    //             Long      ticketId = reqJson.getLong(TICKET_ID);
-    //             resJson.putString(TYPE, SELL_RESPONSE);
-    //             resJson.putLong(TICKET_ID, ticketId);
-    //             resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
-    //             resJson.putString(RESULT, RESULT_SUCCESS);
-    //             resJson.putString(EXT_WALLET_ID, "1234566");
-    //             resJson.putDouble(CREDIT_AMOUNT, 1.20);
-    //             //resJson.putDouble(NEW_CREDIT, 0.0);
-    //             //resJson.putDouble(OLD_CREDIT, 0.0);
-    //             resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
-    //             resJson.putString(EXT_DATA, "Test");
-    //             //resJson.putString(ERROR_MESSAGE, "SUCCESS");
+    //             // Transacción 1: promoción
+    //             ObjectNode txPromo = objectMapper.createObjectNode();
+    //             txPromo.put("extTransactionID", "SELL_" + ticketId);
+    //             txPromo.put("creditAmount", 1.0);
+    //             txPromo.put("extWalletId", "1234566");
+    //             txPromo.put("isPromotion", false);
 
-    //             if (sellWrongResponse) {
-    //                 resJson.putString(RESULT, "error");
-    //                 resJson.putInteger(ERROR_ID, 100);
-    //                 resJson.putString(ERROR_MESSAGE, "Unexpected error");
-    //                 resJson.putString("extTranctionData", "RESPONSIBLE_GAMING_LOSS_LIMIT");
-    //             }
+    //             // Transacción 2: real
+    //             ObjectNode txReal = objectMapper.createObjectNode();
+    //             txReal.put("extTransactionID", "163706");
+    //             txReal.put("creditAmount", 0.0);
+    //             txReal.put("oldCredit", 10.39);
+    //             txReal.put("newCredit", 10.39);
+    //             //txReal.put("extWalletId", "REAL_zafi20250414-3");
+    //             txReal.put("isPromotion", false);
 
-    //             responses.add(resJson.getJsonNode());
-    //         } catch (IOException ex) {
-    //             LOGGER.error(AppLog.Builder.id("walletCredit").message(ex.getMessage()), ex);
+    //             // Array de transacciones
+    //             ArrayNode transactionsArray = objectMapper.createArrayNode();
+    //             transactionsArray.add(txPromo);
+    //             transactionsArray.add(txReal);
+
+    //             // Respuesta principal
+    //             ObjectNode multiWalletResponse = objectMapper.createObjectNode();
+    //             multiWalletResponse.put("type", "MultiWalletSellResponse");
+    //             multiWalletResponse.put("ticketId", ticketId);
+    //             multiWalletResponse.put("result", "success");
+    //             multiWalletResponse.put("errorId", 0);
+    //             multiWalletResponse.put("errorMessage", "SUCCESS");
+    //             multiWalletResponse.put("extTransactionID", "163706");
+    //             multiWalletResponse.put("extTicketId", "Test_" + ticketId);
+    //             multiWalletResponse.set("transactions", transactionsArray);
+    //             multiWalletResponse.put("extTransactionData", "[]");
+
+    //             responses.add(multiWalletResponse);
+
+    //         } catch (Exception e) {
+    //             // En caso de error, puedes devolver un JSON de error también
+    //             ObjectNode errorResponse = objectMapper.createObjectNode();
+    //             errorResponse.put("type", "MultiWalletSellResponse");
+    //             errorResponse.put("result", "error");
+    //             errorResponse.put("errorId", 100);
+    //             errorResponse.put("errorMessage", "Unexpected error: " + e.getMessage());
+    //             responses.add(errorResponse);
     //         }
     //     }
+
     //     return ResponseEntity.ok(responses);
     // }
+
+    @Override
+    public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
+        List<JsonNode> responses = new ArrayList<>();
+        for (JsonNode sellRequest : bulkRequestSell) {
+            try {
+                ModelJson reqJson      = new ModelJson(sellRequest);
+                Integer   entityId     = reqJson.getInteger(ENTITY_ID);
+                Double    actualCredit = getCredit(entityId);
+                ModelJson ticketJson   = new ModelJson(reqJson.getJsonNode(TICKET));
+                Double    newCredit    = actualCredit - ticketJson.getDouble(STAKE, 0D) - ticketJson.getDouble(STAKE_TAXES, 0D);
+                updateCredit(entityId, newCredit);
+
+                ModelJson resJson  = new ModelJson();
+                Long      ticketId = reqJson.getLong(TICKET_ID);
+                resJson.putString(TYPE, SELL_RESPONSE);
+                resJson.putLong(TICKET_ID, ticketId);
+                resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
+                resJson.putString(RESULT, RESULT_SUCCESS);
+                resJson.putString(EXT_WALLET_ID, "1234566");
+                //resJson.putDouble(CREDIT_AMOUNT, 1.20);
+                resJson.putDouble(NEW_CREDIT, 4.88);
+                resJson.putDouble(OLD_CREDIT, 5.0);
+                resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
+                resJson.putString(EXT_DATA, "Test");
+                //resJson.putString(ERROR_MESSAGE, "SUCCESS");
+
+                if (sellWrongResponse) {
+                    resJson.putString(RESULT, "error");
+                    resJson.putInteger(ERROR_ID, 100);
+                    resJson.putString(ERROR_MESSAGE, "Unexpected error");
+                    resJson.putString("extTranctionData", "RESPONSIBLE_GAMING_LOSS_LIMIT");
+                }
+
+                responses.add(resJson.getJsonNode());
+            } catch (IOException ex) {
+                LOGGER.error(AppLog.Builder.id("walletCredit").message(ex.getMessage()), ex);
+            }
+        }
+        return ResponseEntity.ok(responses);
+    }
 
     @Override
     public ResponseEntity<List<JsonNode>> walletSolve(@RequestBody List<JsonNode> bulkRequestSolve) {
