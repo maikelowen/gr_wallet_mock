@@ -279,7 +279,7 @@ public class WalletApiServerController implements WalletApi {
                 txReal.put("creditAmount", 0.0);
                 txReal.put("oldCredit", 10.39);
                 txReal.put("newCredit", 10.39);
-                txReal.put("extWalletId", "REAL_zafi20250414-3");
+                //txReal.put("extWalletId", "REAL_zafi20250414-3");
                 txReal.put("isPromotion", false);
 
                 // Array de transacciones
