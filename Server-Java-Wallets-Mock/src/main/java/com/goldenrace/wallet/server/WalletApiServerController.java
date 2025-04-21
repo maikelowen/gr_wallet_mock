@@ -270,8 +270,9 @@ public class WalletApiServerController implements WalletApi {
                 resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
                 resJson.putString(RESULT, RESULT_SUCCESS);
                 resJson.putString(EXT_WALLET_ID, "1234566");
-                resJson.putDouble(NEW_CREDIT, 0.0);
-                resJson.putDouble(OLD_CREDIT, 0.0);
+                resJson.putDouble(CREDIT_AMOUNT, 1.0);
+                //resJson.putDouble(NEW_CREDIT, 0.0);
+                //resJson.putDouble(OLD_CREDIT, 0.0);
                 resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
                 resJson.putString(EXT_DATA, "Test");
                 //resJson.putString(ERROR_MESSAGE, "SUCCESS");
