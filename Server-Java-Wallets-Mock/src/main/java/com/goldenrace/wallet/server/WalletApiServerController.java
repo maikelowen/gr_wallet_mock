@@ -262,50 +262,68 @@ public class WalletApiServerController implements WalletApi {
     
     public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
         List<JsonNode> responses = new ArrayList<>();
-
+        double promoCredit = 5.00; // Crédito promocional inicial
+    
         for (JsonNode sellRequest : bulkRequestSell) {
             try {
-                long ticketId = sellRequest.get("ticketId").asLong();  // Asegúrate de que `ticketId` esté en el request
-
+                long ticketId = sellRequest.get("ticketId").asLong();
+                double stake = sellRequest.path("ticket").path("stake").asDouble(0.0);
+    
+                // Si no hay crédito suficiente, devolver error
+                if (stake > promoCredit) {
+                    ObjectNode errorResponse = objectMapper.createObjectNode();
+                    errorResponse.put("type", "MultiWalletSellResponse");
+                    errorResponse.put("ticketId", ticketId);
+                    errorResponse.put("result", "error");
+                    errorResponse.put("errorId", 201); // Código de error custom
+                    errorResponse.put("errorMessage", "Insufficient promo credit. Available: " + promoCredit + ", requested: " + stake);
+                    errorResponse.put("extTransactionID", "SELL_" + ticketId);
+                    responses.add(errorResponse);
+                    continue;
+                }
+    
+                double oldCredit = promoCredit;
+                double newCredit = oldCredit - stake;
+                promoCredit = newCredit;
+    
                 // Transacción 1: promoción
                 ObjectNode txPromo = objectMapper.createObjectNode();
                 txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
-                txPromo.put("creditAmount", 1.0);
-                // txPromo.put("oldCredit", 5.00);
-                // txPromo.put("newCredit", 3.80);
+                txPromo.put("creditAmount", stake);
+                txPromo.put("oldCredit", oldCredit);
+                txPromo.put("newCredit", newCredit);
                 txPromo.put("extWalletId", "1234566");
                 txPromo.put("isPromotion", false);
-
+    
                 // Transacción 2: real
                 ObjectNode txReal = objectMapper.createObjectNode();
                 txReal.put("extTransactionID", "SELL_REAL" + ticketId);
                 txReal.put("creditAmount", 0.0);
                 txReal.put("oldCredit", 10.00);
                 txReal.put("newCredit", 10.00);
-                //txReal.put("extWalletId", "REAL_zafi20250414-3");
+                txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                 txReal.put("isPromotion", false);
-
-                // Array de transacciones
+    
+                // Agrupar transacciones
                 ArrayNode transactionsArray = objectMapper.createArrayNode();
                 transactionsArray.add(txPromo);
                 transactionsArray.add(txReal);
-
-                // Respuesta principal
+    
+                // Respuesta final
                 ObjectNode multiWalletResponse = objectMapper.createObjectNode();
                 multiWalletResponse.put("type", "MultiWalletSellResponse");
                 multiWalletResponse.put("ticketId", ticketId);
                 multiWalletResponse.put("result", "success");
                 multiWalletResponse.put("errorId", 0);
                 multiWalletResponse.put("errorMessage", "SUCCESS");
-                multiWalletResponse.put("extTransactionID", "163706");
+                multiWalletResponse.put("extTransactionID", "SELL_" + ticketId);
                 multiWalletResponse.put("extTicketId", "Test_" + ticketId);
                 multiWalletResponse.set("transactions", transactionsArray);
                 multiWalletResponse.put("extTransactionData", "[]");
-
+    
                 responses.add(multiWalletResponse);
-
+    
             } catch (Exception e) {
-                // En caso de error, puedes devolver un JSON de error también
                 ObjectNode errorResponse = objectMapper.createObjectNode();
                 errorResponse.put("type", "MultiWalletSellResponse");
                 errorResponse.put("result", "error");
@@ -314,9 +332,10 @@ public class WalletApiServerController implements WalletApi {
                 responses.add(errorResponse);
             }
         }
-
+    
         return ResponseEntity.ok(responses);
     }
+    
 
     // @Override
     // public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
