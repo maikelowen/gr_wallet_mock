@@ -92,6 +92,9 @@ public class WalletApiServerController implements WalletApi {
     // if it is true, the sell method will respond with an error, Gol-153377
     private final boolean sellWrongResponse;
 
+    private double promoCredit = 5.00; // Crédito promocional inicial
+
+
     public WalletApiServerController(Settings settings) {
         sellWrongResponse = settings.getBoolean("sell.wrong.response", false);
     }
@@ -262,7 +265,6 @@ public class WalletApiServerController implements WalletApi {
     
     public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
         List<JsonNode> responses = new ArrayList<>();
-        double promoCredit = 5.00; // Crédito promocional inicial
     
         for (JsonNode sellRequest : bulkRequestSell) {
             try {
