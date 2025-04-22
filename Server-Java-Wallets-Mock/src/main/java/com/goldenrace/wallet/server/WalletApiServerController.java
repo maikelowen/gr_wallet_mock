@@ -270,17 +270,6 @@ public class WalletApiServerController implements WalletApi {
                 double stake = sellRequest.path("ticket").path("stake").asDouble(0.0);
 
                 synchronized (this) { // Evita condiciones de carrera si hay múltiples hilos
-                    if (stake > promoCredit) {
-                        ObjectNode errorResponse = objectMapper.createObjectNode();
-                        errorResponse.put("type", "MultiWalletSellResponse");
-                        errorResponse.put("ticketId", ticketId);
-                        errorResponse.put("result", "error");
-                        errorResponse.put("errorId", 201);
-                        errorResponse.put("errorMessage", "Insufficient promo credit. Available: " + promoCredit + ", requested: " + stake);
-                        errorResponse.put("extTransactionID", "SELL_" + ticketId);
-                        responses.add(errorResponse);
-                        continue;
-                    }
 
                     double oldCredit = promoCredit;
                     promoCredit -= stake;
@@ -301,7 +290,7 @@ public class WalletApiServerController implements WalletApi {
                     txReal.put("creditAmount", 0.0);
                     txReal.put("oldCredit", 10.00);
                     txReal.put("newCredit", 10.00);
-                    txReal.put("extWalletId", "REAL_wallet_" + ticketId);
+                    //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                     txReal.put("isPromotion", false);
 
                     ArrayNode transactionsArray = objectMapper.createArrayNode();
