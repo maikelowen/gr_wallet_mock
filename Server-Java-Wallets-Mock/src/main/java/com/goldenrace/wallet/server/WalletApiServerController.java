@@ -275,16 +275,8 @@ public class WalletApiServerController implements WalletApi {
                     promoCredit -= stake;
                     double newCredit = promoCredit;
 
-                    // Transacción 1: promo
-                    ObjectNode txPromo = objectMapper.createObjectNode();
-                    txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
-                    txPromo.put("creditAmount", stake);
-                    txPromo.put("oldCredit", oldCredit);
-                    txPromo.put("newCredit", newCredit);
-                    txPromo.put("extWalletId", "FREEROUND_123");
-                    txPromo.put("isPromotion", true);
 
-                    // Transacción 2: real
+                    // Transacción 1: real
                     ObjectNode txReal = objectMapper.createObjectNode();
                     txReal.put("extTransactionID", "SELL_REAL" + ticketId);
                     txReal.put("creditAmount", 0.0);
@@ -293,9 +285,18 @@ public class WalletApiServerController implements WalletApi {
                     //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                     txReal.put("isPromotion", false);
 
+                    // Transacción 2: promo
+                    ObjectNode txPromo = objectMapper.createObjectNode();
+                    txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
+                    txPromo.put("creditAmount", stake);
+                    txPromo.put("oldCredit", oldCredit);
+                    txPromo.put("newCredit", newCredit);
+                    txPromo.put("extWalletId", "FREEROUND_123");
+                    txPromo.put("isPromotion", true);
+
                     ArrayNode transactionsArray = objectMapper.createArrayNode();
-                    transactionsArray.add(txPromo);
                     transactionsArray.add(txReal);
+                    transactionsArray.add(txPromo);
 
                     ObjectNode multiWalletResponse = objectMapper.createObjectNode();
                     multiWalletResponse.put("type", "MultiWalletSellResponse");
