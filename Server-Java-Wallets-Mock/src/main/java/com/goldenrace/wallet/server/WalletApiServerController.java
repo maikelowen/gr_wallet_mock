@@ -333,15 +333,6 @@ public class WalletApiServerController implements WalletApi {
         return ResponseEntity.ok(responses);
     }
 
-        @PostMapping(value = "/promo-credit/reset", consumes = MediaType.ALL_VALUE)
-        public ResponseEntity<ObjectNode> resetPromoCredit(@RequestParam(defaultValue = "5.00") double newCredit) {
-            promoCredit = newCredit;
-            ObjectNode response = objectMapper.createObjectNode();
-            response.put("message", "Promo credit reset");
-            response.put("newCredit", promoCredit);
-            return ResponseEntity.ok(response);
-        }
-
     // @Override
     // public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
     //     List<JsonNode> responses = new ArrayList<>();
