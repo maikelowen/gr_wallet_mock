@@ -272,6 +272,11 @@ public class WalletApiServerController implements WalletApi {
                 long ticketId = sellRequest.get("ticketId").asLong();
                 double stake = sellRequest.path("ticket").path("stake").asDouble(0.0);
 
+                ModelJson reqJson      = new ModelJson(sellRequest);
+                Integer   entityId     = reqJson.getInteger(ENTITY_ID);
+                Double    actualCredit = getCredit(entityId);
+                
+
                 synchronized (this) { // Evita condiciones de carrera si hay múltiples hilos
 
                     double oldCredit = promoCredit;
@@ -283,8 +288,8 @@ public class WalletApiServerController implements WalletApi {
                     ObjectNode txReal = objectMapper.createObjectNode();
                     txReal.put("extTransactionID", "SELL_REAL" + ticketId);
                     txReal.put("creditAmount", 0.0);
-                    txReal.put("oldCredit", 10.00);
-                    txReal.put("newCredit", 10.00);
+                    txReal.put("oldCredit", actualCredit);
+                    txReal.put("newCredit", actualCredit);
                     //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                     txReal.put("isPromotion", false);
 
