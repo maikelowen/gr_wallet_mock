@@ -269,15 +269,16 @@ public class WalletApiServerController implements WalletApi {
 
                 // Transacción 1: promoción
                 ObjectNode txPromo = objectMapper.createObjectNode();
-                txPromo.put("extTransactionID", "SELL_" + ticketId);
-                txPromo.put("oldCredit", 5.00);
-                txPromo.put("newCredit", 3.80);
+                txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
+                txPromo.put("creditAmount", 1.0);
+                // txPromo.put("oldCredit", 5.00);
+                // txPromo.put("newCredit", 3.80);
                 txPromo.put("extWalletId", "1234566");
                 txPromo.put("isPromotion", false);
 
                 // Transacción 2: real
                 ObjectNode txReal = objectMapper.createObjectNode();
-                //txReal.put("extTransactionID", "163706");
+                txReal.put("extTransactionID", "SELL_REAL" + ticketId);
                 txReal.put("creditAmount", 0.0);
                 txReal.put("oldCredit", 10.00);
                 txReal.put("newCredit", 10.00);
