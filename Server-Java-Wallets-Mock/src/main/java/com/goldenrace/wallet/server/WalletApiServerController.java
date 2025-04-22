@@ -271,26 +271,20 @@ public class WalletApiServerController implements WalletApi {
             try {
                 long ticketId = sellRequest.get("ticketId").asLong();
                 double stake = sellRequest.path("ticket").path("stake").asDouble(0.0);
-                ModelJson reqJson      = new ModelJson(sellRequest);
-                Integer   entityId     = reqJson.getInteger(ENTITY_ID);
-                Double    actualCredit = getCredit(entityId);
-                ModelJson ticketJson   = new ModelJson(reqJson.getJsonNode(TICKET));
-                Double    newCredit    = actualCredit - ticketJson.getDouble(STAKE, 0D) - ticketJson.getDouble(STAKE_TAXES, 0D);
-                updateCredit(entityId, newCredit);
 
                 synchronized (this) { // Evita condiciones de carrera si hay múltiples hilos
 
                     double oldCredit = promoCredit;
                     promoCredit -= stake;
-                    double newPromoCredit = promoCredit;
+                    double newCredit = promoCredit;
 
 
                     // Transacción 1: real
                     ObjectNode txReal = objectMapper.createObjectNode();
                     txReal.put("extTransactionID", "SELL_REAL" + ticketId);
                     txReal.put("creditAmount", 0.0);
-                    txReal.put("oldCredit", actualCredit);
-                    txReal.put("newCredit", actualCredit);
+                    txReal.put("oldCredit", 10.00);
+                    txReal.put("newCredit", 10.00);
                     //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                     txReal.put("isPromotion", false);
 
@@ -299,7 +293,7 @@ public class WalletApiServerController implements WalletApi {
                     txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
                     txPromo.put("creditAmount", stake);
                     txPromo.put("oldCredit", oldCredit);
-                    txPromo.put("newCredit", newPromoCredit);
+                    txPromo.put("newCredit", newCredit);
                     txPromo.put("extWalletId", "FREEROUND_123");
                     txPromo.put("isPromotion", true);
 
@@ -334,14 +328,14 @@ public class WalletApiServerController implements WalletApi {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping(value = "/promo-credit/reset", consumes = MediaType.ALL_VALUE)
-    public ResponseEntity<ObjectNode> resetPromoCredit(@RequestParam(defaultValue = "5.00") double newCredit) {
-        promoCredit = newCredit;
-        ObjectNode response = objectMapper.createObjectNode();
-        response.put("message", "Promo credit reset");
-        response.put("newCredit", promoCredit);
-        return ResponseEntity.ok(response);
-    }
+        @PostMapping(value = "/promo-credit/reset", consumes = MediaType.ALL_VALUE)
+        public ResponseEntity<ObjectNode> resetPromoCredit(@RequestParam(defaultValue = "5.00") double newCredit) {
+            promoCredit = newCredit;
+            ObjectNode response = objectMapper.createObjectNode();
+            response.put("message", "Promo credit reset");
+            response.put("newCredit", promoCredit);
+            return ResponseEntity.ok(response);
+        }
 
     // @Override
     // public ResponseEntity<List<JsonNode>> walletSell(@RequestBody List<JsonNode> bulkRequestSell) {
