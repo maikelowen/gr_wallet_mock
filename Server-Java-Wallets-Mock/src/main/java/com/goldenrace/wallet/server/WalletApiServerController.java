@@ -13,6 +13,7 @@ import com.goldenrace.wallet.server.properties.logging.AppLogger;
 import com.goldenrace.wallet.server.properties.logging.IAppLogger;
 import com.goldenrace.wallet.server.properties.Settings;
 import org.joda.time.DateTime;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -327,7 +328,7 @@ public class WalletApiServerController implements WalletApi {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping("/wallet/promo-credit/reset")
+    @PostMapping(value = "/promo-credit/reset", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<ObjectNode> resetPromoCredit(@RequestParam(defaultValue = "5.00") double newCredit) {
         promoCredit = newCredit;
         ObjectNode response = objectMapper.createObjectNode();
