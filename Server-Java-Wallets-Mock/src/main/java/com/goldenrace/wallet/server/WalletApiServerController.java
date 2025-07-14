@@ -299,8 +299,8 @@ public class WalletApiServerController implements WalletApi {
                     ObjectNode txPromo = objectMapper.createObjectNode();
                     txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
                     txPromo.put("creditAmount", stake);
-                    txPromo.put("oldCredit", oldCredit);
-                    txPromo.put("newCredit", newnewPromoCredit);
+                    // txPromo.put("oldCredit", oldCredit);
+                    // txPromo.put("newCredit", newnewPromoCredit);
                     txPromo.put("extWalletId", "FREEROUND_123");
                     txPromo.put("isPromotion", false);
 
