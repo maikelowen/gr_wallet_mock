@@ -302,7 +302,7 @@ public class WalletApiServerController implements WalletApi {
                     txPromo.put("oldCredit", oldCredit);
                     txPromo.put("newCredit", newnewPromoCredit);
                     txPromo.put("extWalletId", "FREEROUND_123");
-                    txPromo.put("isPromotion", true);
+                    txPromo.put("isPromotion", false);
 
                     ArrayNode transactionsArray = objectMapper.createArrayNode();
                     transactionsArray.add(txReal);
