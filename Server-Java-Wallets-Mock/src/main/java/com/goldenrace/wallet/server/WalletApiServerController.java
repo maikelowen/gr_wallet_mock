@@ -281,54 +281,119 @@ public class WalletApiServerController implements WalletApi {
 
                 synchronized (this) { // Evita condiciones de carrera si hay múltiples hilos
 
-                    double oldCredit = promoCredit;
-                    promoCredit -= stake;
-                    double newnewPromoCredit = promoCredit;
+                    // double oldCredit = promoCredit;
+                    // promoCredit -= stake;
+                    // double newnewPromoCredit = promoCredit;
+                    String extWalletId = sellRequest.path("extWalletId").asText();
 
 
+                    //Scenario for free rounds
+                    if(extWalletId == "FREEROUND_123"){
+                    
+                        try{
+                            // Transacción 1: real
+                            ObjectNode txReal = objectMapper.createObjectNode();
+                            txReal.put("extTransactionID", "SELL_REAL" + ticketId);
+                            txReal.put("creditAmount", 0.0);
+                            txReal.put("oldCredit", actualCredit);
+                            txReal.put("newCredit", actualCredit);
+                            //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
+                            txReal.put("isPromotion", false);
+
+                            // Transacción 2: promo
+                            ObjectNode txPromo = objectMapper.createObjectNode();
+                            txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
+                            txPromo.put("creditAmount", stake);
+                            // txPromo.put("oldCredit", oldCredit);
+                            // txPromo.put("newCredit", newnewPromoCredit);
+                            txPromo.put("extWalletId", "FREEROUND_123");
+                            txPromo.put("isPromotion", false);
+
+                            ArrayNode transactionsArray = objectMapper.createArrayNode();
+                            transactionsArray.add(txReal);
+                            transactionsArray.add(txPromo);
+
+                            ObjectNode multiWalletResponse = objectMapper.createObjectNode();
+                            multiWalletResponse.put("type", "MultiWalletSellResponse");
+                            multiWalletResponse.put("ticketId", ticketId);
+                            multiWalletResponse.put("result", "success");
+                            multiWalletResponse.put("errorId", 0);
+                            multiWalletResponse.put("errorMessage", "SUCCESS");
+                            multiWalletResponse.put("extTransactionID", "SELL_" + ticketId);
+                            multiWalletResponse.put("extTicketId", "Test_" + ticketId);
+                            multiWalletResponse.set("transactions", transactionsArray);
+                            multiWalletResponse.put("extTransactionData", "[]");
+
+                            responses.add(multiWalletResponse);
+                        }catch (Exception e) {
+                            ObjectNode errorResponse = objectMapper.createObjectNode();
+                            errorResponse.put("type", "MultiWalletSellResponse");
+                            errorResponse.put("result", "error");
+                            errorResponse.put("errorId", 100);
+                            errorResponse.put("errorMessage", "Unexpected error: " + e.getMessage());
+                            responses.add(errorResponse);
+                        }
+
+                    }else{
+                    //Scenario normal wallet
+
+                    ModelJson resJson  = new ModelJson();
+                    resJson.putString(TYPE, SELL_RESPONSE);
+                    resJson.putLong(TICKET_ID, ticketId);
+                    resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
+                    resJson.putString(RESULT, RESULT_SUCCESS);
+                    resJson.putDouble(NEW_CREDIT, newCredit);
+                    resJson.putDouble(OLD_CREDIT, actualCredit);
+                    resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
+                    resJson.putString(EXT_DATA, "Test");
+
+                    if (sellWrongResponse) {
+                    resJson.putString(RESULT, "error");
+                    resJson.putInteger(ERROR_ID, 100);
+                    resJson.putString(ERROR_MESSAGE, "Unexpected error");
+                    resJson.putString("extTranctionData", "RESPONSIBLE_GAMING_LOSS_LIMIT");
+                    }
+                        responses.add(resJson.getJsonNode());
+                    }
                     // Transacción 1: real
-                    ObjectNode txReal = objectMapper.createObjectNode();
-                    txReal.put("extTransactionID", "SELL_REAL" + ticketId);
-                    txReal.put("creditAmount", 0.0);
-                    txReal.put("oldCredit", actualCredit);
-                    txReal.put("newCredit", newCredit);
-                    //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
-                    txReal.put("isPromotion", false);
+                    // ObjectNode txReal = objectMapper.createObjectNode();
+                    // txReal.put("extTransactionID", "SELL_REAL" + ticketId);
+                    // txReal.put("creditAmount", 0.0);
+                    // txReal.put("oldCredit", actualCredit);
+                    // txReal.put("newCredit", newCredit);
+                    // //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
+                    // txReal.put("isPromotion", false);
 
-                    // Transacción 2: promo
-                    ObjectNode txPromo = objectMapper.createObjectNode();
-                    txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
-                    txPromo.put("creditAmount", stake);
-                    // txPromo.put("oldCredit", oldCredit);
-                    // txPromo.put("newCredit", newnewPromoCredit);
-                    txPromo.put("extWalletId", "FREEROUND_123");
-                    txPromo.put("isPromotion", false);
+                    // // Transacción 2: promo
+                    // ObjectNode txPromo = objectMapper.createObjectNode();
+                    // txPromo.put("extTransactionID", "SELL_PROMO" + ticketId);
+                    // txPromo.put("creditAmount", stake);
+                    // // txPromo.put("oldCredit", oldCredit);
+                    // // txPromo.put("newCredit", newnewPromoCredit);
+                    // txPromo.put("extWalletId", "FREEROUND_123");
+                    // txPromo.put("isPromotion", false);
 
-                    ArrayNode transactionsArray = objectMapper.createArrayNode();
-                    transactionsArray.add(txReal);
-                    transactionsArray.add(txPromo);
+                    // ArrayNode transactionsArray = objectMapper.createArrayNode();
+                    // transactionsArray.add(txReal);
+                    // transactionsArray.add(txPromo);
 
-                    ObjectNode multiWalletResponse = objectMapper.createObjectNode();
-                    multiWalletResponse.put("type", "MultiWalletSellResponse");
-                    multiWalletResponse.put("ticketId", ticketId);
-                    multiWalletResponse.put("result", "success");
-                    multiWalletResponse.put("errorId", 0);
-                    multiWalletResponse.put("errorMessage", "SUCCESS");
-                    multiWalletResponse.put("extTransactionID", "SELL_" + ticketId);
-                    multiWalletResponse.put("extTicketId", "Test_" + ticketId);
-                    multiWalletResponse.set("transactions", transactionsArray);
-                    multiWalletResponse.put("extTransactionData", "[]");
+                    // ObjectNode multiWalletResponse = objectMapper.createObjectNode();
+                    // multiWalletResponse.put("type", "MultiWalletSellResponse");
+                    // multiWalletResponse.put("ticketId", ticketId);
+                    // multiWalletResponse.put("result", "success");
+                    // multiWalletResponse.put("errorId", 0);
+                    // multiWalletResponse.put("errorMessage", "SUCCESS");
+                    // multiWalletResponse.put("extTransactionID", "SELL_" + ticketId);
+                    // multiWalletResponse.put("extTicketId", "Test_" + ticketId);
+                    // multiWalletResponse.set("transactions", transactionsArray);
+                    // multiWalletResponse.put("extTransactionData", "[]");
 
-                    responses.add(multiWalletResponse);
+                    // responses.add(multiWalletResponse);
                 }
 
             } catch (Exception e) {
-                ObjectNode errorResponse = objectMapper.createObjectNode();
-                errorResponse.put("type", "MultiWalletSellResponse");
-                errorResponse.put("result", "error");
-                errorResponse.put("errorId", 100);
-                errorResponse.put("errorMessage", "Unexpected error: " + e.getMessage());
-                responses.add(errorResponse);
+                LOGGER.error(AppLog.Builder.id("walletCredit").message(e.getMessage()), e);
+
             }
         }
 
