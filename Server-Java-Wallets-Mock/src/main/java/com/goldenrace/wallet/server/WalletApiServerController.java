@@ -272,6 +272,10 @@ public class WalletApiServerController implements WalletApi {
                 long ticketId = sellRequest.get("ticketId").asLong();
                 double stake = sellRequest.path("ticket").path("stake").asDouble(0.0);
 
+                String extWalletId = sellRequest.path("extWalletId").asText();
+
+                LOGGER.debug("extWalletId:",  extWalletId);
+
                 ModelJson reqJson      = new ModelJson(sellRequest);
                 Integer   entityId     = reqJson.getInteger(ENTITY_ID);
                 Double    actualCredit = getCredit(entityId);
@@ -284,8 +288,6 @@ public class WalletApiServerController implements WalletApi {
                     // double oldCredit = promoCredit;
                     // promoCredit -= stake;
                     // double newnewPromoCredit = promoCredit;
-                    String extWalletId = sellRequest.path("extWalletId").asText();
-
 
                     //Scenario for free rounds
                     if("FREEROUND_123".equals(extWalletId)){
