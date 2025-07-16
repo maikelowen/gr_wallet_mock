@@ -288,7 +288,7 @@ public class WalletApiServerController implements WalletApi {
 
 
                     //Scenario for free rounds
-                    if(extWalletId == "FREEROUND_123"){
+                    if("FREEROUND_123".equals(extWalletId)){
                     
                         try{
                             // Transacción 1: real
