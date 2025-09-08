@@ -340,20 +340,14 @@ public class WalletApiServerController implements WalletApi {
                     //Scenario normal wallet
 
                     ModelJson resJson  = new ModelJson();
-                    // resJson.putString(TYPE, SELL_RESPONSE);
-                    // resJson.putLong(TICKET_ID, ticketId);
-                    // resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
-                    // resJson.putString(RESULT, RESULT_SUCCESS);
-                    // resJson.putDouble(NEW_CREDIT, newCredit);
-                    // resJson.putDouble(OLD_CREDIT, actualCredit);
-                    // resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
-                    // resJson.putString(EXT_DATA, "Test");
-
-                    //Mock test for error message
-                    resJson.putString(RESULT, "error");
-                    resJson.putInteger(ERROR_ID, 4);
-                    resJson.putString(ERROR_MESSAGE, "Testing if ErrorMessage reach the integration");
-                    resJson.putString("extTranctionData", "Testing if extTranctionData reach the integration");
+                    resJson.putString(TYPE, SELL_RESPONSE);
+                    resJson.putLong(TICKET_ID, ticketId);
+                    resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
+                    resJson.putString(RESULT, RESULT_SUCCESS);
+                    resJson.putDouble(NEW_CREDIT, newCredit);
+                    resJson.putDouble(OLD_CREDIT, actualCredit);
+                    resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
+                    resJson.putString(EXT_DATA, "Test");
 
                     if (sellWrongResponse) {
                     resJson.putString(RESULT, "error");
