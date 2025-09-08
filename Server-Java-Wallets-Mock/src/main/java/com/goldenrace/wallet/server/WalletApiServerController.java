@@ -34,7 +34,7 @@ public class WalletApiServerController implements WalletApi {
 
     private static final IAppLogger LOGGER = AppLogger.getLogger(WalletApiServerController.class);
 
-    private static final double DEFAULT_CREDIT   = 10; //100_000D
+    private static double DEFAULT_CREDIT   = 10; //100_000D
     private static final String DEFAULT_CURRENCY = "EUR"; //BTC
 
     private static final boolean SOLVE_CREDIT = true;
@@ -89,7 +89,6 @@ public class WalletApiServerController implements WalletApi {
 
     // Credit
     private final Map<String, Double> creditMap = new ConcurrentHashMap<>();
-    private double promoCredit = 3.00;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -120,7 +119,8 @@ public class WalletApiServerController implements WalletApi {
 
     @Override
     public ResponseEntity<JsonNode> sessionLogin(@RequestBody JsonNode loginRequest) {
-        Double userCredit = 10D;
+        //Double userCredit = 10D;
+        DEFAULT_CREDIT = 10D;
         // try {
         //     ModelJson reqJson = new ModelJson(loginRequest);
         //     userCredit = getCredit(reqJson.getInteger(UNIT_ID));
@@ -131,7 +131,7 @@ public class WalletApiServerController implements WalletApi {
         resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
         resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
         resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
-        resJson.putDouble(CREDIT, userCredit);
+        resJson.putDouble(CREDIT, DEFAULT_CREDIT);
         //Testing extWalletId
         //resJson.putString("extWalletId", "ext_2");
         return ResponseEntity.ok(resJson.getJsonNode());
@@ -176,7 +176,7 @@ public class WalletApiServerController implements WalletApi {
         for (JsonNode creditRequest : bulkRequestCredit) {
             try {
                 ModelJson reqJson      = new ModelJson(creditRequest);
-                Double    actualCredit = 0.0;
+                Double    actualCredit = DEFAULT_CREDIT;
                 ModelJson resJson      = new ModelJson();
                 resJson.putString(TYPE, CREDIT_RESPONSE);
                 resJson.putDouble(CREDIT, actualCredit);
@@ -299,7 +299,6 @@ public class WalletApiServerController implements WalletApi {
                             txReal.put("creditAmount", 0.0);
                             txReal.put("oldCredit", actualCredit);
                             txReal.put("newCredit", actualCredit);
-                            //txReal.put("extWalletId", "REAL_wallet_" + ticketId);
                             txReal.put("isPromotion", false);
 
                             // Transacción 2: promo
@@ -337,17 +336,24 @@ public class WalletApiServerController implements WalletApi {
                         }
 
                     }else{
+                    
                     //Scenario normal wallet
 
                     ModelJson resJson  = new ModelJson();
-                    resJson.putString(TYPE, SELL_RESPONSE);
-                    resJson.putLong(TICKET_ID, ticketId);
-                    resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
-                    resJson.putString(RESULT, RESULT_SUCCESS);
-                    resJson.putDouble(NEW_CREDIT, newCredit);
-                    resJson.putDouble(OLD_CREDIT, actualCredit);
-                    resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
-                    resJson.putString(EXT_DATA, "Test");
+                    // resJson.putString(TYPE, SELL_RESPONSE);
+                    // resJson.putLong(TICKET_ID, ticketId);
+                    // resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
+                    // resJson.putString(RESULT, RESULT_SUCCESS);
+                    // resJson.putDouble(NEW_CREDIT, newCredit);
+                    // resJson.putDouble(OLD_CREDIT, actualCredit);
+                    // resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
+                    // resJson.putString(EXT_DATA, "Test");
+
+                    //Mock test for error message
+                    resJson.putString(RESULT, "error");
+                    resJson.putInteger(ERROR_ID, 4);
+                    resJson.putString(ERROR_MESSAGE, "Testing if ErrorMessage reach the integration");
+                    resJson.putString("extTranctionData", "Testing if extTranctionData reach the integration");
 
                     if (sellWrongResponse) {
                     resJson.putString(RESULT, "error");
@@ -442,6 +448,7 @@ public class WalletApiServerController implements WalletApi {
     //     }
     //     return ResponseEntity.ok(responses);
     // }
+
 
     @Override
     public ResponseEntity<List<JsonNode>> walletSolve(@RequestBody List<JsonNode> bulkRequestSolve) {
