@@ -202,8 +202,13 @@ public class WalletApiServerController implements WalletApi {
                 ModelJson resJson;
                 if (Objects.nonNull(pending) && pending > 0) {
                     Integer entityId     = reqJson.getInteger(ENTITY_ID);
-                    Double  actualCredit = getCredit(entityId);
-                    Double  newCredit    = actualCredit + reqJson.getDouble(AMOUNT);
+                    //correct way:
+                    //Double  actualCredit = getCredit(entityId);
+                    //Double  newCredit    = actualCredit + reqJson.getDouble(AMOUNT);
+
+                    //credit set to 0.0
+                    Double  actualCredit = 0.0;
+                    Double  newCredit    = 0.0;
                     updateCredit(entityId, newCredit);
                     resJson = generateWalletCreditResponse(actualCredit, newCredit, ticketId, pending);
                 } else {
