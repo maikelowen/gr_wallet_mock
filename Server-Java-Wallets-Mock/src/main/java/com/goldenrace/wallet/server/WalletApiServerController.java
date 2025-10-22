@@ -34,7 +34,7 @@ public class WalletApiServerController implements WalletApi {
 
     private static final IAppLogger LOGGER = AppLogger.getLogger(WalletApiServerController.class);
 
-    private static double DEFAULT_CREDIT   = 10; //100_000D
+    private static double DEFAULT_CREDIT   = 0.0; //100_000D
     private static final String DEFAULT_CURRENCY = "EUR"; //BTC
 
     private static final boolean SOLVE_CREDIT = true;
@@ -120,7 +120,7 @@ public class WalletApiServerController implements WalletApi {
     @Override
     public ResponseEntity<JsonNode> sessionLogin(@RequestBody JsonNode loginRequest) {
         //Double userCredit = 10D;
-        DEFAULT_CREDIT = 10D;
+        DEFAULT_CREDIT = 0.0;
         // try {
         //     ModelJson reqJson = new ModelJson(loginRequest);
         //     userCredit = getCredit(reqJson.getInteger(UNIT_ID));
@@ -131,7 +131,7 @@ public class WalletApiServerController implements WalletApi {
         resJson.putString(TYPE, WALLET_LOGIN_RESPONSE);
         resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
         resJson.putString(CURRENCY_CODE, DEFAULT_CURRENCY);
-        resJson.putDouble(CREDIT, 0.0);
+        resJson.putDouble(CREDIT, DEFAULT_CREDIT);
         //Testing extWalletId
         //resJson.putString("extWalletId", "ext_2");
         return ResponseEntity.ok(resJson.getJsonNode());
@@ -344,8 +344,8 @@ public class WalletApiServerController implements WalletApi {
                     resJson.putLong(TICKET_ID, ticketId);
                     resJson.putString(EXT_TICKET_ID, "EXT_" + ticketId);
                     resJson.putString(RESULT, RESULT_SUCCESS);
-                    resJson.putDouble(NEW_CREDIT, 0.0);
-                    resJson.putDouble(OLD_CREDIT, 0.0);
+                    resJson.putDouble(NEW_CREDIT, newCredit);
+                    resJson.putDouble(OLD_CREDIT, actualCredit);
                     resJson.putString(EXT_TRANSACTION_ID, "SELL_" + ticketId);
                     resJson.putString(EXT_DATA, "Test");
 
