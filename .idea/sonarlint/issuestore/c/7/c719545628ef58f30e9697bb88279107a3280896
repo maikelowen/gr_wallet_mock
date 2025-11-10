@@ -1,0 +1,52 @@
+
+c
+java:S1192Å"LUse already-defined constant 'RESULT' instead of duplicating its value here.(ŒêôÁ
+e
+java:S1192Æ"NUse already-defined constant 'ERROR_ID' instead of duplicating its value here.(ª—Ø
+g
+java:S1192±"PUse already-defined constant 'OLD_CREDIT' instead of duplicating its value here.(Ä Ñé
+o
+java:S1192¯"XUse already-defined constant 'EXT_TRANSACTION_ID' instead of duplicating its value here.(†¿¨Ã
+c
+java:S1192–"LUse already-defined constant 'TICKET' instead of duplicating its value here.(¤á‹­
+j
+java:S1192Ç"SUse already-defined constant 'ERROR_MESSAGE' instead of duplicating its value here.(Ö„“
+o
+java:S1192˜"SUse already-defined constant 'EXT_WALLET_ID' instead of duplicating its value here.(ŒÎİ¹ÿÿÿÿÿ
+b
+java:S1192–"KUse already-defined constant 'STAKE' instead of duplicating its value here.(¤á‹­
+o
+java:S1192É"SUse already-defined constant 'EXT_TICKET_ID' instead of duplicating its value here.(¹ÅèÎşÿÿÿÿ
+k
+java:S1192Å"TUse already-defined constant 'RESULT_SUCCESS' instead of duplicating its value here.(ŒêôÁ
+g
+java:S1192²"PUse already-defined constant 'NEW_CREDIT' instead of duplicating its value here.(Æ’Ù‚
+o
+java:S1192°"SUse already-defined constant 'CREDIT_AMOUNT' instead of duplicating its value here.(ê«Ë¥şÿÿÿÿ
+k
+java:S1192•"OUse already-defined constant 'TICKET_ID' instead of duplicating its value here.(ÓáÊÿÿÿÿÿ
+Q
+java:S1141¬"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+o
+java:S3008%"YRename this field "DEFAULT_CREDIT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷ˆ©Ö
+L
+java:S2696{"6Make the enclosing method "static" or remove this set.(å‡Øñ
+V	java:S125z"<This block of commented-out lines of code should be removed.(£³ ·ıÿÿÿÿ
+V	java:S125|"<This block of commented-out lines of code should be removed.(ñ¥ùšøÿÿÿÿ
+R	java:S125ˆ"<This block of commented-out lines of code should be removed.(×üê›
+W	java:S125Î"<This block of commented-out lines of code should be removed.(µİâÔüÿÿÿÿ
+W	java:S125¥"<This block of commented-out lines of code should be removed.(„È½ ûÿÿÿÿ
+R	java:S125¹"<This block of commented-out lines of code should be removed.(®İš¤
+R	java:S125î"<This block of commented-out lines of code should be removed.(şÄÂŒ
+W	java:S125÷"<This block of commented-out lines of code should be removed.(áÇÁÿıÿÿÿÿ
+R	java:S125ÿ"<This block of commented-out lines of code should be removed.(ˆÀºŞ
+W	java:S125ƒ"<This block of commented-out lines of code should be removed.(Ô¿³öùÿÿÿÿ
+R	java:S125"<This block of commented-out lines of code should be removed.(¬ËÂÄ
+W	java:S125›"<This block of commented-out lines of code should be removed.(é«Š÷ÿÿÿÿÿ
+W	java:S125¦"<This block of commented-out lines of code should be removed.(åººÈÿÿÿÿÿ
+R	java:S125´"<This block of commented-out lines of code should be removed.(é§¼ş
+Q	java:S125»"<This block of commented-out lines of code should be removed.(•Šı3
+J
+java:S1172ş"3Remove this unused method parameter "creditAmount".(À²ßß
+W	java:S125‚"<This block of commented-out lines of code should be removed.(¿Ä÷æúÿÿÿÿ
+R	java:S125ˆ"<This block of commented-out lines of code should be removed.(éß
