@@ -30,7 +30,7 @@ java:S1141¬"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
 o
 java:S3008%"YRename this field "DEFAULT_CREDIT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷ˆ©Ö
 L
-java:S2696{"6Make the enclosing method "static" or remove this set.(å‡Øñ
+java:S2696{"6Make the enclosing method "static" or remove this set.(€ã
 V	java:S125z"<This block of commented-out lines of code should be removed.(£³ ·ıÿÿÿÿ
 V	java:S125|"<This block of commented-out lines of code should be removed.(ñ¥ùšøÿÿÿÿ
 R	java:S125ˆ"<This block of commented-out lines of code should be removed.(×üê›
