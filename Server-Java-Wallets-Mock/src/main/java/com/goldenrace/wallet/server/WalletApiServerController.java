@@ -132,13 +132,13 @@ public class WalletApiServerController implements WalletApi {
                 ModelJson resJson = new ModelJson();
                 
                 // 1. Obtener el token original
-                //String originalExtToken = reqJson.getString(EXT_TOKEN);
+                String originalExtToken = reqJson.getString(EXT_TOKEN);
                 
                 // 2. Aplicar la lógica de expiración
                 if (reqJson.getDateTime(LAST_SEEN).plusMinutes(5).getMillis() < DateTime.now().getMillis()) {
                     // CONDICIÓN CUMPLIDA: Sesión ha expirado (más de 5 minutos).
                     // Generar un NUEVO token para la respuesta.
-                    resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
+                    resJson.putString(EXT_TOKEN, originalExtToken);
                     
                 } else {
                     // CONDICIÓN NO CUMPLIDA: Sesión activa (menos de 5 minutos).
