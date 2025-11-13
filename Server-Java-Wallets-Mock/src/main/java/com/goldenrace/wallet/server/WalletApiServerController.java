@@ -101,23 +101,23 @@ public class WalletApiServerController implements WalletApi {
 
     // Método original
 
-    @Override
-    public ResponseEntity<List<JsonNode>> sessionKeepAlive(@RequestBody List<JsonNode> bulkRequestKeep) {
-        List<JsonNode> responses = new ArrayList<>();
-        for (JsonNode req : bulkRequestKeep) {
-            try {
-                ModelJson reqJson = new ModelJson(req);
-                if (reqJson.getDateTime(LAST_SEEN).plusMinutes(5).getMillis() < DateTime.now().getMillis()) {
-                    ModelJson resJson = new ModelJson();
-                    resJson.putString(EXT_TOKEN, reqJson.getString(EXT_TOKEN));
-                    responses.add(resJson.getJsonNode());
-                }
-            } catch (IOException ex) {
-                LOGGER.error(AppLog.Builder.id("sessionKeepAlive").message(ex.getMessage()), ex);
-            }
-        }
-        return ResponseEntity.ok(responses);
-    }
+    // @Override
+    // public ResponseEntity<List<JsonNode>> sessionKeepAlive(@RequestBody List<JsonNode> bulkRequestKeep) {
+    //     List<JsonNode> responses = new ArrayList<>();
+    //     for (JsonNode req : bulkRequestKeep) {
+    //         try {
+    //             ModelJson reqJson = new ModelJson(req);
+    //             if (reqJson.getDateTime(LAST_SEEN).plusMinutes(5).getMillis() < DateTime.now().getMillis()) {
+    //                 ModelJson resJson = new ModelJson();
+    //                 resJson.putString(EXT_TOKEN, reqJson.getString(EXT_TOKEN));
+    //                 responses.add(resJson.getJsonNode());
+    //             }
+    //         } catch (IOException ex) {
+    //             LOGGER.error(AppLog.Builder.id("sessionKeepAlive").message(ex.getMessage()), ex);
+    //         }
+    //     }
+    //     return ResponseEntity.ok(responses);
+    // }
 
     //Nueva implementación
 
@@ -156,6 +156,34 @@ public class WalletApiServerController implements WalletApi {
     //     }
     //     return ResponseEntity.ok(responses);
     // }
+
+        //Nueva implementación 2.0
+
+    @Override
+    public ResponseEntity<List<JsonNode>> sessionKeepAlive(@RequestBody List<JsonNode> bulkRequestKeep) {
+        List<JsonNode> responses = new ArrayList<>();
+        
+        // Iteramos sobre cada solicitud en el lote
+        for (JsonNode req : bulkRequestKeep) {
+            try {
+                ModelJson reqJson = new ModelJson(req);
+                ModelJson resJson = new ModelJson();
+                
+                 // 1. Obtener el token original
+                 String originalExtToken = reqJson.getString(EXT_TOKEN);
+                resJson.putString(EXT_TOKEN,originalExtToken);
+                
+                
+                // 3. Añadir la respuesta a la lista, independientemente de si el token es nuevo o el original.
+                responses.add(resJson.getJsonNode());
+                
+            } catch (IOException ex) {
+                LOGGER.error(AppLog.Builder.id("sessionKeepAlive").message(ex.getMessage()), ex);
+                // Opcional: Podrías añadir un objeto de error a 'responses' aquí si fuera necesario.
+            }
+        }
+        return ResponseEntity.ok(responses);
+    }
 
     @Override
     public ResponseEntity<JsonNode> sessionLogin(@RequestBody JsonNode loginRequest) {
