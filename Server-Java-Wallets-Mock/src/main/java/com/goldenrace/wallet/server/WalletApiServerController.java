@@ -107,7 +107,7 @@ public class WalletApiServerController implements WalletApi {
                 ModelJson reqJson = new ModelJson(req);
                 if (reqJson.getDateTime(LAST_SEEN).plusMinutes(5).getMillis() < DateTime.now().getMillis()) {
                     ModelJson resJson = new ModelJson();
-                    resJson.putString(EXT_TOKEN, reqJson.getString(EXT_TOKEN));
+                    resJson.putString(EXT_TOKEN, UUID.randomUUID().toString());
                     responses.add(resJson.getJsonNode());
                 }
             } catch (IOException ex) {
