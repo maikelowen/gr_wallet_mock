@@ -119,7 +119,7 @@ public class WalletApiServerController implements WalletApi {
     //     return ResponseEntity.ok(responses);
     // }
 
-    Implementación origina cambiando el array vacío
+    // Implementación origina cambiando el array vacío
     @Override
     public ResponseEntity<List<JsonNode>> sessionKeepAlive(@RequestBody List<JsonNode> bulkRequestKeep) {
         List<JsonNode> responses = new ArrayList<>();
