@@ -217,7 +217,7 @@ public class WalletApiServerController implements WalletApi {
     @Override
     public ResponseEntity<JsonNode> sessionLogin(@RequestBody JsonNode loginRequest) {
         //Double userCredit = 10D;
-        DEFAULT_CREDIT = 0.0;
+        DEFAULT_CREDIT = 10.0;
         // try {
         //     ModelJson reqJson = new ModelJson(loginRequest);
         //     userCredit = getCredit(reqJson.getInteger(UNIT_ID));
